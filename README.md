@@ -7,6 +7,39 @@ sources, then TCP/TLS-tests them.
 
 _Last updated: 2026-11-11 05:58 UTC_
 
+## Local development
+
+The collector requires Python 3.12 or newer and the packages in
+[`requirements.txt`](requirements.txt). On Debian or Ubuntu, install the
+optional `obfs4proxy` binary to enable real obfs4 handshake checks:
+
+```sh
+sudo apt-get update
+sudo apt-get install -y obfs4proxy
+```
+
+Create a virtual environment and install the Python dependencies:
+
+```sh
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+Check the environment without making network requests or changing collected
+bridge data:
+
+```sh
+python -m py_compile main.py
+python -c "import requests; from bs4 import BeautifulSoup"
+```
+
+Run `python main.py` to perform a live collection. It fetches bridge sources,
+probes bridge connectivity, and updates files in `bridge/` and the counts in
+this README. Network access is required; review those changes before committing.
+If `obfs4proxy` is unavailable, the collector skips the obfs4 handshake check
+and retains its TCP-tested results.
+
 ## Pooled transports
 
 These have large, rotating bridge pools that the Tor Project and community
